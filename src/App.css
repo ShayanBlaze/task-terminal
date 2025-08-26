@@ -1,0 +1,239 @@
+/* src/App.css */
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap");
+
+/* --- متغیرهای تم برای دسترسی راحت --- */
+:root {
+  --background-color: #0d0d0d;
+  --primary-color: #00ff41;
+  --secondary-color: rgba(0, 255, 65, 0.5);
+  --darker-bg: #1a1a1a;
+  --border-color: #222;
+}
+
+/* --- Reset و استایل‌های عمومی --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--primary-color);
+  font-family: "Roboto Mono", monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 20px;
+  overflow: hidden; /* جلوگیری از اسکرول به خاطر افکت‌ها */
+}
+
+/* --- افکت مانیتور قدیمی و اسکن لاین (بخش جدید) --- */
+body::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+    linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.06),
+      rgba(0, 255, 0, 0.02),
+      rgba(0, 0, 255, 0.06)
+    );
+  z-index: 2;
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none; /* اجازه کلیک از روی این لایه */
+  animation: flicker 0.15s infinite;
+}
+
+/* --- انیمیشن بوت شدن برنامه (بخش جدید) --- */
+@keyframes bootSequence {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  opacity: 0; /* در ابتدا مخفی است */
+  animation: bootSequence 1s forwards; /* انیمیشن بوت شدن */
+  animation-delay: 0.5s; /* با تاخیر شروع می‌شود */
+}
+
+/* --- انیمیشن تایپ شدن عنوان (بخش جدید) --- */
+.heading {
+  font-size: 3rem;
+  margin: 40px 0;
+  text-transform: uppercase;
+  text-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--secondary-color);
+  letter-spacing: 2px;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 0.15em solid var(--primary-color); /* شبیه‌سازی کرسر ترمینال */
+  width: 0; /* از عرض صفر شروع می‌شود */
+  animation: typing 2s steps(13, end) forwards,
+    blink-caret 0.75s step-end infinite;
+  animation-delay: 1.5s; /* بعد از بوت شدن شروع می‌شود */
+}
+
+/* --- فرم ورودی --- */
+.input_todo {
+  width: 100%;
+  margin-bottom: 40px;
+  /* انیمیشن برای فرم ورودی */
+  opacity: 0;
+  animation: bootSequence 1s forwards;
+  animation-delay: 3s; /* بعد از عنوان ظاهر می‌شود */
+}
+
+.input_box {
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid var(--primary-color);
+  padding: 15px 20px;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  font-family: "Roboto Mono", monospace;
+  outline: none;
+  transition: all 0.2s ease;
+  border-radius: 0; /* گوشه‌های تیز برای حس ترمینال */
+}
+
+.input_box::placeholder {
+  color: var(--secondary-color);
+}
+
+.input_box:focus {
+  box-shadow: 0 0 10px var(--primary-color);
+}
+
+/* --- لیست وظایف --- */
+.todos {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+}
+
+/* --- انیمیشن ظاهر شدن آیتم‌های لیست (بخش جدید) --- */
+@keyframes item-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.todos_item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: var(--darker-bg);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--secondary-color); /* یک نوار رنگی در کنار */
+  transition: all 0.2s ease;
+  border-radius: 0;
+  /* انیمیشن برای هر آیتم */
+  opacity: 0; /* در ابتدا مخفی */
+  animation: item-fade-in 0.5s forwards;
+}
+
+.todos_item:hover {
+  border-color: var(--primary-color);
+}
+
+.todos_item--text {
+  flex: 1;
+  font-size: 1.1rem;
+  word-break: break-word;
+  margin-right: 15px;
+  transition: all 0.3s ease;
+}
+
+.todos_item input[type="text"] {
+  width: 100%;
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed var(--primary-color);
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  font-family: "Roboto Mono", monospace;
+  outline: none;
+  margin-right: 15px;
+}
+
+/* --- آیکون‌ها --- */
+.icons {
+  display: flex;
+  gap: 15px;
+}
+.icon {
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.icon:hover {
+  transform: scale(1.2);
+  text-shadow: 0 0 5px var(--primary-color);
+}
+
+/* --- Keyframes برای انیمیشن‌ها (بخش جدید) --- */
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 14ch;
+  } /* 13 کاراکتر برای TASK_TERMINAL */
+}
+
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: var(--primary-color);
+  }
+}
+
+/* --- رسپانسیو --- */
+@media (max-width: 768px) {
+  .heading {
+    font-size: 2rem;
+  }
+  @keyframes typing {
+    to {
+      width: 14ch;
+    }
+  }
+}
