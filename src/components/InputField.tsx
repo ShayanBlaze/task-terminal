@@ -19,6 +19,7 @@ const InputField: React.FC<Props> = ({ todo, setTodo, onAdd }) => {
     >
       <input
         ref={inputRef}
+        spellCheck={false}
         type="text"
         value={todo}
         onChange={(e) => setTodo(e.target.value)}

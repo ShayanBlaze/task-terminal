@@ -1,5 +1,3 @@
-// src/components/TodoItem.tsx
-
 import React, { useState, useRef, useEffect } from "react";
 import { Todo } from "../models/models";
 import { AiFillEdit, AiFillDelete, AiOutlineCheck } from "react-icons/ai";

@@ -1,5 +1,3 @@
-// src/components/TodoList.tsx
-
 import React from "react";
 import { Todo } from "../models/models";
 import TodoItem from "./TodoItem";
