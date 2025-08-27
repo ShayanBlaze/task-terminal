@@ -1,26 +1,15 @@
-import React from "react";
-import { Todo } from "../models/models";
+import React, { useContext } from "react";
 import TodoItem from "./TodoItem";
+import { TodoContext } from "../state/TodoContext";
 
-interface Props {
-  todos: Todo[];
-  onDone: (id: number) => void;
-  onDelete: (id: number) => void;
-  onEdit: (id: number, newTitle: string) => void;
-}
 
-const TodoList: React.FC<Props> = ({ todos, onDone, onDelete, onEdit }) => {
+const TodoList: React.FC = () => {
+  const { state } = useContext(TodoContext);
+
   return (
     <div className="todos">
-      {todos.map((todo, index) => (
-        <TodoItem
-          key={todo.id}
-          index={index}
-          todo={todo}
-          onDone={onDone}
-          onDelete={onDelete}
-          onEdit={onEdit}
-        />
+      {state.map((todo, index) => (
+        <TodoItem key={todo.id} index={index} todo={todo} />
       ))}
     </div>
   );

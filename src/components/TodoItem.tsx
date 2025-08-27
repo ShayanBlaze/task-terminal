@@ -1,22 +1,16 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Todo } from "../models/models";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { AiFillEdit, AiFillDelete, AiOutlineCheck } from "react-icons/ai";
+
+import { Todo } from "../state/types";
+import { TodoContext } from "../state/TodoContext";
 
 interface Props {
   index: number;
   todo: Todo;
-  onDone: (id: number) => void;
-  onDelete: (id: number) => void;
-  onEdit: (id: number, newTitle: string) => void;
 }
 
-const TodoItem: React.FC<Props> = ({
-  todo,
-  onDone,
-  onDelete,
-  onEdit,
-  index,
-}) => {
+const TodoItem: React.FC<Props> = ({ todo, index }) => {
+  const { dispatch } = useContext(TodoContext);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(todo.title);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -29,7 +23,7 @@ const TodoItem: React.FC<Props> = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onEdit(todo.id, editedTitle);
+    dispatch({ type: "EDIT", payload: { id: todo.id, title: editedTitle } });
     setIsEditing(false);
   };
 
@@ -70,10 +64,16 @@ const TodoItem: React.FC<Props> = ({
         >
           <AiFillEdit />
         </span>
-        <span className="icon" onClick={() => onDelete(todo.id)}>
+        <span
+          className="icon"
+          onClick={() => dispatch({ type: "DELETE", payload: todo.id })}
+        >
           <AiFillDelete />
         </span>
-        <span className="icon" onClick={() => onDone(todo.id)}>
+        <span
+          className="icon"
+          onClick={() => dispatch({ type: "DONE", payload: todo.id })}
+        >
           <AiOutlineCheck />
         </span>
       </div>

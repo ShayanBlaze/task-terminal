@@ -1,19 +1,25 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef, useState } from "react";
+import { TodoContext } from "../state/TodoContext";
 
-type Props = {
-  todo: string;
-  setTodo: React.Dispatch<React.SetStateAction<string>>;
-  onAdd: (e: React.FormEvent) => void;
-};
-
-const InputField: React.FC<Props> = ({ todo, setTodo, onAdd }) => {
+const InputField: React.FC = () => {
+  const { dispatch } = useContext(TodoContext);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const [todo, setTodo] = useState<string>("");
+
+  const handleAddTodo = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (todo) {
+      dispatch({ type: "ADD", payload: todo });
+      setTodo("");
+    }
+  };
 
   return (
     <form
       className="input_todo"
       onSubmit={(e) => {
-        onAdd(e);
+        handleAddTodo(e);
         inputRef.current?.blur();
       }}
     >

@@ -1,5 +1,4 @@
-import { Todo } from "../models/models";
-import { Actions } from "./types";
+import { Todo, Actions } from "./types";
 
 export const TodoReducer = (state: Todo[], action: Actions): Todo[] => {
   switch (action.type) {
