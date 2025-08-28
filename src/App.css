@@ -1,14 +1,18 @@
-/* src/App.css */
+/* src/App.css (طرح جدید: NEON_GRID) */
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap");
 
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap");
-
-/* --- متغیرهای تم برای دسترسی راحت --- */
+/* --- متغیرهای تم برای طرح جدید --- */
 :root {
-  --background-color: #0d0d0d;
+  --background-color: #010409;
+  --grid-color: rgba(0, 255, 65, 0.07);
   --primary-color: #00ff41;
-  --secondary-color: rgba(0, 255, 65, 0.5);
-  --darker-bg: #1a1a1a;
-  --border-color: #222;
+  --secondary-color: #79c0ff; /* رنگ جدید برای تمایز */
+  --glow-color: rgba(0, 255, 65, 0.3);
+  --container-bg: rgba(13, 17, 23, 0.8);
+  --border-color: rgba(0, 255, 65, 0.2);
+  --hover-border-color: rgba(0, 255, 65, 0.8);
+  --danger-color: #ff4757;
+  --font-family: "Fira Code", monospace;
 }
 
 /* --- Reset و استایل‌های عمومی --- */
@@ -18,48 +22,26 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
   background-color: var(--background-color);
   color: var(--primary-color);
-  font-family: "Roboto Mono", monospace;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-family);
   padding: 20px;
-  overflow: hidden; /* جلوگیری از اسکرول به خاطر افکت‌ها */
-}
-
-/* --- افکت مانیتور قدیمی و اسکن لاین (بخش جدید) --- */
-body::before {
-  content: " ";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
-    linear-gradient(
-      90deg,
-      rgba(255, 0, 0, 0.06),
-      rgba(0, 255, 0, 0.02),
-      rgba(0, 0, 255, 0.06)
-    );
-  z-index: 2;
-  background-size: 100% 2px, 3px 100%;
-  pointer-events: none; /* اجازه کلیک از روی این لایه */
-  animation: flicker 0.15s infinite;
-}
-
-/* --- انیمیشن بوت شدن برنامه (بخش جدید) --- */
-@keyframes bootSequence {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  overflow: hidden; /* جلوگیری از اسکرول برای افکت تمام صفحه */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  /* پس زمینه شبکه دیجیتالی */
+  background-image: linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 30px 30px;
+  animation: pan-grid 60s linear infinite;
 }
 
 .App {
@@ -67,173 +49,264 @@ body::before {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  opacity: 0; /* در ابتدا مخفی است */
-  animation: bootSequence 1s forwards; /* انیمیشن بوت شدن */
-  animation-delay: 0.5s; /* با تاخیر شروع می‌شود */
+  max-width: 1200px;
+  height: calc(100vh - 40px);
+  overflow-y: auto; /* اسکرول فقط داخل اپلیکیشن */
+  padding-right: 10px; /* فاصله برای اسکرول بار */
 }
 
-/* --- انیمیشن تایپ شدن عنوان (بخش جدید) --- */
+/* --- استایل سفارشی برای اسکرول‌بار --- */
+.App::-webkit-scrollbar {
+  width: 6px;
+}
+.App::-webkit-scrollbar-track {
+  background: transparent;
+}
+.App::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 3px;
+  box-shadow: 0 0 5px var(--glow-color);
+}
+
+/* --- عنوان اصلی با افکت گلیچ --- */
 .heading {
-  font-size: 3rem;
+  font-size: 3.5rem;
   margin: 40px 0;
   text-transform: uppercase;
-  text-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--secondary-color);
-  letter-spacing: 2px;
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 0.15em solid var(--primary-color); /* شبیه‌سازی کرسر ترمینال */
-  width: 0; /* از عرض صفر شروع می‌شود */
-  animation: typing 2s steps(13, end) forwards,
-    blink-caret 0.75s step-end infinite;
-  animation-delay: 1.5s; /* بعد از بوت شدن شروع می‌شود */
+  letter-spacing: 5px;
+  position: relative;
+  animation: text-flicker 3s linear infinite;
+  text-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--glow-color);
 }
 
-/* --- فرم ورودی --- */
+/* --- فیلد ورودی --- */
 .input_todo {
+  display: flex;
   width: 100%;
+  max-width: 600px;
   margin-bottom: 40px;
-  /* انیمیشن برای فرم ورودی */
-  opacity: 0;
-  animation: bootSequence 1s forwards;
-  animation-delay: 3s; /* بعد از عنوان ظاهر می‌شود */
+  position: relative;
 }
 
 .input_box {
   width: 100%;
-  background-color: transparent;
-  border: 1px solid var(--primary-color);
+  background-color: var(--container-bg);
+  border: 1px solid var(--border-color);
   padding: 15px 20px;
   font-size: 1.2rem;
   color: var(--primary-color);
-  font-family: "Roboto Mono", monospace;
+  font-family: var(--font-family);
   outline: none;
-  transition: all 0.2s ease;
-  border-radius: 0; /* گوشه‌های تیز برای حس ترمینال */
-}
-
-.input_box::placeholder {
-  color: var(--secondary-color);
+  transition: all 0.3s ease;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    0 100%
+  );
 }
 
 .input_box:focus {
-  box-shadow: 0 0 10px var(--primary-color);
+  border-color: var(--hover-border-color);
+  box-shadow: 0 0 15px var(--glow-color), 0 0 10px var(--glow-color) inset;
 }
 
-/* --- لیست وظایف --- */
+.input_button {
+  display: none;
+}
+
+/* --- نگهدارنده ستون‌ها --- */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+/* --- استایل کلی ستون‌ها (طرح هولوگرافیک) --- */
 .todos {
+  background: var(--container-bg);
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  position: relative;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+  animation: fade-in-up 0.5s ease forwards;
+  animation-delay: 0.5s;
+  opacity: 0;
+}
+
+.todos__heading {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-align: center;
+  color: var(--secondary-color); /* استفاده از رنگ ثانویه */
+  text-shadow: 0 0 5px var(--secondary-color);
+}
+
+/* --- کانتینر Droppable --- */
+.droppable-container {
+  min-height: 250px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  gap: 10px;
+  gap: 15px;
+  border: 2px dashed transparent;
+  transition: all 0.3s ease;
+  padding: 10px;
+  border-radius: 4px;
 }
 
-/* --- انیمیشن ظاهر شدن آیتم‌های لیست (بخش جدید) --- */
-@keyframes item-fade-in {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.droppable-container.is-over {
+  background-color: var(--glow-color);
+  border-color: var(--primary-color);
 }
 
+/* --- آیتم وظیفه (طرح جدید) --- */
 .todos_item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 15px;
-  background-color: var(--darker-bg);
+  background-color: rgba(1, 4, 9, 0.7);
   border: 1px solid var(--border-color);
-  border-left: 3px solid var(--secondary-color); /* یک نوار رنگی در کنار */
   transition: all 0.2s ease;
-  border-radius: 0;
-  /* انیمیشن برای هر آیتم */
-  opacity: 0; /* در ابتدا مخفی */
-  animation: item-fade-in 0.5s forwards;
+  cursor: grab;
+  position: relative;
+  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%);
 }
 
-.todos_item:hover {
-  border-color: var(--primary-color);
+.todos_item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background-color: var(--primary-color);
+  box-shadow: 0 0 8px var(--glow-color);
+  transition: all 0.3s ease;
+  transform: scaleY(0);
+  transform-origin: bottom;
+}
+
+.todos_item:hover::before {
+  transform: scaleY(1);
+  transform-origin: top;
+}
+
+.todos_item.dragging {
+  opacity: 0.8;
+  transform: scale(1.03);
+  border-color: var(--hover-border-color);
+  box-shadow: 0 0 20px var(--glow-color);
+  filter: drop-shadow(0 0 10px var(--primary-color));
 }
 
 .todos_item--text {
   flex: 1;
   font-size: 1.1rem;
   word-break: break-word;
-  margin-right: 15px;
-  transition: all 0.3s ease;
+  margin: 0 15px;
 }
 
 .todos_item input[type="text"] {
   width: 100%;
-  flex: 1;
   background: transparent;
   border: none;
-  border-bottom: 1px dashed var(--primary-color);
   color: var(--primary-color);
   font-size: 1.1rem;
-  font-family: "Roboto Mono", monospace;
+  font-family: var(--font-family);
   outline: none;
-  margin-right: 15px;
+  margin: 0 15px;
+  padding: 5px 0;
+  border-bottom: 1px dashed var(--secondary-color);
 }
 
-/* --- آیکون‌ها --- */
 .icons {
   display: flex;
   gap: 15px;
+  z-index: 2;
 }
+
 .icon {
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
+
 .icon:hover {
   transform: scale(1.2);
-  text-shadow: 0 0 5px var(--primary-color);
+  color: var(--secondary-color);
+  filter: drop-shadow(0 0 8px var(--secondary-color));
 }
 
-/* --- Keyframes برای انیمیشن‌ها (بخش جدید) --- */
-@keyframes flicker {
-  0%,
+.icon.delete:hover {
+  color: var(--danger-color);
+  filter: drop-shadow(0 0 8px var(--danger-color));
+}
+
+/* --- انیمیشن‌ها --- */
+@keyframes pan-grid {
+  0% {
+    background-position: 0 0;
+  }
   100% {
+    background-position: -60px -60px;
+  }
+}
+
+@keyframes text-flicker {
+  0%,
+  19%,
+  21%,
+  23%,
+  25%,
+  54%,
+  56%,
+  100% {
+    text-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--glow-color);
     opacity: 1;
   }
-  50% {
+  20%,
+  24%,
+  55% {
+    text-shadow: none;
     opacity: 0.8;
   }
 }
 
-@keyframes typing {
+@keyframes fade-in-up {
   from {
-    width: 0;
+    opacity: 0;
+    transform: translateY(20px);
   }
   to {
-    width: 14ch;
-  } /* 13 کاراکتر برای TASK_TERMINAL */
-}
-
-@keyframes blink-caret {
-  from,
-  to {
-    border-color: transparent;
-  }
-  50% {
-    border-color: var(--primary-color);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* --- رسپانسیو --- */
+/* --- ریسپانسیوسازی --- */
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+  .App {
+    height: auto;
+    overflow-y: visible;
+  }
+  body {
+    overflow: auto;
+  }
+}
+
 @media (max-width: 768px) {
-  .heading {
-    font-size: 2rem;
+  body {
+    padding: 10px;
   }
-  @keyframes typing {
-    to {
-      width: 14ch;
-    }
+  .heading {
+    font-size: 2.5rem;
   }
 }

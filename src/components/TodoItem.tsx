@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { AiFillEdit, AiFillDelete, AiOutlineCheck } from "react-icons/ai";
+import {
+  AiFillEdit,
+  AiFillDelete,
+  AiOutlineCheck,
+  AiOutlineDrag,
+} from "react-icons/ai";
+import { useDraggable } from "@dnd-kit/core";
 
 import { Todo } from "../state/types";
 import { TodoContext } from "../state/TodoContext";
@@ -11,6 +17,14 @@ interface Props {
 
 const TodoItem: React.FC<Props> = ({ todo, index }) => {
   const { dispatch } = useContext(TodoContext);
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: todo.id,
+      data: {
+        droppableId: todo.completed ? "completed" : "active",
+      },
+    });
+
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(todo.title);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -27,11 +41,19 @@ const TodoItem: React.FC<Props> = ({ todo, index }) => {
     setIsEditing(false);
   };
 
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      }
+    : undefined;
+
   return (
     <form
-      className="todos_item"
+      className={`todos_item ${isDragging ? "dragging" : ""}`}
+      style={style}
       onSubmit={handleSubmit}
-      style={{ animationDelay: `${index * 100}ms` }}
+      ref={setNodeRef}
+      {...attributes}
     >
       {isEditing ? (
         <input
@@ -72,9 +94,18 @@ const TodoItem: React.FC<Props> = ({ todo, index }) => {
         </span>
         <span
           className="icon"
-          onClick={() => dispatch({ type: "DONE", payload: todo.id })}
+          onClick={() => {
+            if (todo.completed) {
+              dispatch({ type: "UNDONE", payload: todo.id });
+            } else {
+              dispatch({ type: "DONE", payload: todo.id });
+            }
+          }}
         >
           <AiOutlineCheck />
+        </span>
+        <span className="icon" {...listeners}>
+          <AiOutlineDrag />
         </span>
       </div>
     </form>

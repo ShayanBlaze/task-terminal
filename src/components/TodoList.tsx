@@ -1,16 +1,18 @@
-import React, { useContext } from "react";
-import TodoItem from "./TodoItem";
-import { TodoContext } from "../state/TodoContext";
-
+import ActiveDroppable from "./ActiveDroppable";
+import CompleteDroppable from "./CompleteDroppable";
 
 const TodoList: React.FC = () => {
-  const { state } = useContext(TodoContext);
-
   return (
-    <div className="todos">
-      {state.map((todo, index) => (
-        <TodoItem key={todo.id} index={index} todo={todo} />
-      ))}
+    <div className="container">
+      <div className="todos">
+        <span className="todos__heading">Active Tasks</span>
+        <ActiveDroppable />
+      </div>
+
+      <div className="todos remove">
+        <span className="todos__heading">Completed Tasks</span>
+        <CompleteDroppable />
+      </div>
     </div>
   );
 };
