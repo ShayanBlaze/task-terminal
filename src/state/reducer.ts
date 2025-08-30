@@ -7,7 +7,12 @@ export const TodoReducer = (AppState: AppState, action: Actions): AppState => {
         ...AppState,
         active: [
           ...AppState.active,
-          { id: Date.now(), title: action.payload, completed: false },
+          {
+            id: Date.now(),
+            title: action.payload,
+            completed: false,
+            priority: "medium",
+          },
         ],
       };
     case "DELETE":
@@ -90,6 +95,18 @@ export const TodoReducer = (AppState: AppState, action: Actions): AppState => {
           { ...action.payload, completed: true },
         ],
       };
+    case "CHANGE_PRIORITY": {
+      const { id, priority } = action.payload;
+      return {
+        ...AppState,
+        active: AppState.active.map((todo) =>
+          todo.id === id ? { ...todo, priority } : todo
+        ),
+        completed: AppState.completed.map((todo) =>
+          todo.id === id ? { ...todo, priority } : todo
+        ),
+      };
+    }
     default:
       return AppState;
   }

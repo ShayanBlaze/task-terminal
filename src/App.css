@@ -11,6 +11,9 @@
   --hover-border-color: rgba(0, 255, 65, 0.8);
   --danger-color: #ff4757;
   --font-family: "Fira Code", monospace;
+  --low-priority-color: #3cba45;
+  --medium-priority-color: #f1c40f;
+  --high-priority-color: #e74c3c;
 }
 
 * {
@@ -163,7 +166,12 @@ body {
   transition: all 0.2s ease;
   cursor: grab;
   position: relative;
-  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%);
+  z-index: 1;
+}
+
+.todos_item.menu-open {
+  z-index: 10;
+  clip-path: none;
 }
 
 .todos_item::before {
@@ -234,6 +242,88 @@ body {
 .icon.delete:hover {
   color: var(--danger-color);
   filter: drop-shadow(0 0 8px var(--danger-color));
+}
+
+.priority-bubble {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.priority-bubble--dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.priority-bubble--dot:hover {
+  transform: scale(1.2);
+}
+
+.priority-bubble-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: var(--container-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  z-index: 10000;
+  width: 100px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  animation: fade-in-up 0.2s ease;
+}
+
+.priority-menu-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.priority-menu-item:hover {
+  background-color: var(--primary-color);
+  color: var(--background-color);
+}
+
+.priority-menu-item::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.item-low::before {
+  background-color: #3498db;
+}
+
+.item-medium::before {
+  background-color: #f1c40f;
+}
+
+.item-high::before {
+  background-color: #e74c3c;
+}
+
+.bubble-low {
+  background-color: #3498db;
+}
+
+.bubble-medium {
+  background-color: #f1c40f;
+}
+
+.bubble-high {
+  background-color: #e74c3c;
 }
 
 @keyframes pan-grid {

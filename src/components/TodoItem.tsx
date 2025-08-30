@@ -9,6 +9,7 @@ import { useDraggable } from "@dnd-kit/core";
 
 import { Todo } from "../state/types";
 import { TodoContext } from "../state/TodoContext";
+import PriorityBubble from "./PriorityBubble";
 
 interface Props {
   index: number;
@@ -17,6 +18,7 @@ interface Props {
 
 const TodoItem: React.FC<Props> = ({ todo, index }) => {
   const { dispatch } = useContext(TodoContext);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: todo.id,
@@ -49,12 +51,19 @@ const TodoItem: React.FC<Props> = ({ todo, index }) => {
 
   return (
     <form
-      className={`todos_item ${isDragging ? "dragging" : ""}`}
+      className={`todos_item ${isDragging ? "dragging" : ""} ${
+        isMenuOpen ? "menu-open" : ""
+      }`}
       style={style}
       onSubmit={handleSubmit}
       ref={setNodeRef}
       {...attributes}
     >
+      <PriorityBubble
+        todo={todo}
+        priority={todo.priority}
+        onMenuToggle={setIsMenuOpen}
+      />
       {isEditing ? (
         <input
           ref={inputRef}
@@ -74,7 +83,6 @@ const TodoItem: React.FC<Props> = ({ todo, index }) => {
           {todo.title}
         </span>
       )}
-
       <div className="icons">
         <span
           className="icon"
