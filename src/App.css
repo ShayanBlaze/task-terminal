@@ -169,7 +169,6 @@ body {
   background-color: rgba(1, 4, 9, 0.7);
   border: 1px solid var(--border-color);
   transition: all 0.2s ease;
-  cursor: grab;
   position: relative;
   z-index: 1;
 }
@@ -239,6 +238,10 @@ body {
   font-size: 1.4rem;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+.grab-handle {
+  cursor: grab;
 }
 
 .icon:hover {

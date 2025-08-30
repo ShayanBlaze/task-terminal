@@ -112,7 +112,7 @@ const TodoItem: React.FC<Props> = ({ todo, index }) => {
         >
           <AiOutlineCheck />
         </span>
-        <span className="icon" {...listeners}>
+        <span className="icon grab-handle" {...listeners}>
           <AiOutlineDrag />
         </span>
       </div>
