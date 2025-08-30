@@ -1,5 +1,14 @@
 import InputField from "./InputField";
-import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from "@dnd-kit/core";
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import TodoList from "./TodoList";
 import { useContext, useState } from "react";
 import { TodoContext } from "../state/TodoContext";
@@ -9,6 +18,20 @@ import TodoItem from "./TodoItem";
 const TodoAppLayout = () => {
   const { AppState, dispatch } = useContext(TodoContext);
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
+
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    })
+  );
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
@@ -58,7 +81,11 @@ const TodoAppLayout = () => {
       <span className="heading">TASK_TERMINAL</span>
       <InputField />
 
-      <DndContext onDragStart={handleDragStart} onDragEnd={onDragEnd}>
+      <DndContext
+        sensors={sensors}
+        onDragStart={handleDragStart}
+        onDragEnd={onDragEnd}
+      >
         <TodoList />
 
         <DragOverlay>
