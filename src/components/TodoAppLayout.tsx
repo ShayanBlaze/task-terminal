@@ -12,7 +12,7 @@ import {
 import TodoList from "./TodoList";
 import { useContext, useState } from "react";
 import { TodoContext } from "../state/TodoContext";
-import { Todo } from "../state/types";
+import { Todo } from "../state/schemas";
 import TodoItem from "./TodoItem";
 
 const TodoAppLayout = () => {
@@ -45,35 +45,24 @@ const TodoAppLayout = () => {
 
   const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+    setActiveTodo(null);
 
     if (!over || active.id === over.id) {
       return;
     }
 
-    const sourceContainer = active.data.current?.droppableId as string;
-    const destinationContainer = over.id as string;
+    const movedTodo =
+      AppState.active.find((t) => t.id === active.id) ||
+      AppState.completed.find((t) => t.id === active.id);
 
-    if (sourceContainer !== destinationContainer) {
-      const movedTodo =
-        sourceContainer === "active"
-          ? AppState.active.find((t) => t.id === active.id)
-          : AppState.completed.find((t) => t.id === active.id);
+    if (!movedTodo) return;
 
-      if (!movedTodo) return;
+    const destination = over.id as "active" | "completed";
 
-      if (sourceContainer === "active") {
-        dispatch({ type: "DELETE_FROM_ACTIVE", payload: Number(active.id) });
-      } else {
-        dispatch({ type: "DELETE_FROM_COMPLETED", payload: Number(active.id) });
-      }
-
-      if (destinationContainer === "completed") {
-        dispatch({ type: "ADD_TO_COMPLETED", payload: movedTodo });
-      } else {
-        dispatch({ type: "ADD_TO_ACTIVE", payload: movedTodo });
-      }
-    }
-    setActiveTodo(null);
+    dispatch({
+      type: "MOVE",
+      payload: { movedTodo, destination },
+    });
   };
 
   return (

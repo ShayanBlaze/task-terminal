@@ -1,4 +1,5 @@
-import { Actions, AppState } from "./types";
+import { Actions } from "./types";
+import { AppState } from "./schemas";
 
 export const TodoReducer = (AppState: AppState, action: Actions): AppState => {
   switch (action.type) {
@@ -11,10 +12,11 @@ export const TodoReducer = (AppState: AppState, action: Actions): AppState => {
             id: Date.now(),
             title: action.payload,
             completed: false,
-            priority: "medium",
+            priority: "Medium",
           },
         ],
       };
+
     case "DELETE":
       return {
         ...AppState,
@@ -23,23 +25,23 @@ export const TodoReducer = (AppState: AppState, action: Actions): AppState => {
           (todo) => todo.id !== action.payload
         ),
       };
+
     case "DONE": {
       const itemToMove = AppState.active.find(
         (todo) => todo.id === action.payload
       );
       if (!itemToMove) return AppState;
-
       return {
         active: AppState.active.filter((todo) => todo.id !== action.payload),
         completed: [...AppState.completed, { ...itemToMove, completed: true }],
       };
     }
+
     case "UNDONE": {
       const itemToMove = AppState.completed.find(
         (todo) => todo.id === action.payload
       );
       if (!itemToMove) return AppState;
-
       return {
         completed: AppState.completed.filter(
           (todo) => todo.id !== action.payload
@@ -47,6 +49,7 @@ export const TodoReducer = (AppState: AppState, action: Actions): AppState => {
         active: [...AppState.active, { ...itemToMove, completed: false }],
       };
     }
+
     case "EDIT":
       return {
         ...AppState,
@@ -61,40 +64,31 @@ export const TodoReducer = (AppState: AppState, action: Actions): AppState => {
             : todo
         ),
       };
-    case "UPDATE_LISTS":
-      return {
-        ...AppState,
-        active: action.payload.AppState.active,
-        completed: action.payload.AppState.completed,
-      };
-    case "DELETE_FROM_ACTIVE":
-      return {
-        ...AppState,
-        active: AppState.active.filter((todo) => todo.id !== action.payload),
-      };
 
-    case "DELETE_FROM_COMPLETED":
-      return {
-        ...AppState,
-        completed: AppState.completed.filter(
-          (todo) => todo.id !== action.payload
-        ),
-      };
+    case "MOVE": {
+      const { movedTodo, destination } = action.payload;
+      const sourceList = movedTodo.completed ? "completed" : "active";
 
-    case "ADD_TO_ACTIVE":
-      return {
-        ...AppState,
-        active: [...AppState.active, { ...action.payload, completed: false }],
-      };
+      if (sourceList === destination) return AppState;
 
-    case "ADD_TO_COMPLETED":
-      return {
-        ...AppState,
-        completed: [
-          ...AppState.completed,
-          { ...action.payload, completed: true },
-        ],
-      };
+      const newActive = AppState.active.filter((t) => t.id !== movedTodo.id);
+      const newCompleted = AppState.completed.filter(
+        (t) => t.id !== movedTodo.id
+      );
+
+      if (destination === "completed") {
+        return {
+          active: newActive,
+          completed: [...newCompleted, { ...movedTodo, completed: true }],
+        };
+      } else {
+        return {
+          active: [...newActive, { ...movedTodo, completed: false }],
+          completed: newCompleted,
+        };
+      }
+    }
+
     case "CHANGE_PRIORITY": {
       const { id, priority } = action.payload;
       return {

@@ -7,7 +7,7 @@ import {
 } from "react-icons/ai";
 import { useDraggable } from "@dnd-kit/core";
 
-import { Todo } from "../state/types";
+import { Todo } from "../state/schemas";
 import { TodoContext } from "../state/TodoContext";
 import PriorityBubble from "./PriorityBubble";
 

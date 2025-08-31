@@ -1,5 +1,11 @@
-import React, { useContext, useState, useEffect, useRef, useCallback } from "react";
-import { Priority, Todo } from "../state/types";
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
+import { Priority, Todo } from "../state/schemas";
 import { TodoContext } from "../state/TodoContext";
 
 interface Props {
@@ -15,10 +21,13 @@ const PriorityBubble: React.FC<Props> = ({ priority, todo, onMenuToggle }) => {
 
   const bubbleClassName = `priority-bubble--dot bubble-${priority}`;
 
-  const toggleMenu = useCallback((visible: boolean) => {
-    setBubbleMenuVisible(visible);
-    onMenuToggle(visible);
-  }, [onMenuToggle]);
+  const toggleMenu = useCallback(
+    (visible: boolean) => {
+      setBubbleMenuVisible(visible);
+      onMenuToggle(visible);
+    },
+    [onMenuToggle]
+  );
 
   const handlePriorityChange = (newPriority: Priority) => {
     dispatch({
@@ -51,19 +60,19 @@ const PriorityBubble: React.FC<Props> = ({ priority, todo, onMenuToggle }) => {
         <div className="priority-bubble-menu">
           <div
             className="priority-menu-item item-low"
-            onClick={() => handlePriorityChange("low")}
+            onClick={() => handlePriorityChange("Low")}
           >
             Low
           </div>
           <div
             className="priority-menu-item item-medium"
-            onClick={() => handlePriorityChange("medium")}
+            onClick={() => handlePriorityChange("Medium")}
           >
             Medium
           </div>
           <div
             className="priority-menu-item item-high"
-            onClick={() => handlePriorityChange("high")}
+            onClick={() => handlePriorityChange("High")}
           >
             High
           </div>

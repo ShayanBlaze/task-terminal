@@ -11,7 +11,7 @@
   --hover-border-color: rgba(0, 255, 65, 0.8);
   --danger-color: #ff4757;
   --font-family: "Fira Code", monospace;
-  --low-priority-color: #3cba45;
+  --low-priority-color: #3498db;
   --medium-priority-color: #f1c40f;
   --high-priority-color: #e74c3c;
 }
@@ -325,16 +325,16 @@ body {
   background-color: #e74c3c;
 }
 
-.bubble-low {
-  background-color: #3498db;
+.bubble-Low {
+  background-color: var(--low-priority-color);
 }
 
-.bubble-medium {
-  background-color: #f1c40f;
+.bubble-Medium {
+  background-color: var(--medium-priority-color); /* #f1c40f */
 }
 
-.bubble-high {
-  background-color: #e74c3c;
+.bubble-High {
+  background-color: var(--high-priority-color); /* #e74c3c */
 }
 
 @keyframes pan-grid {
