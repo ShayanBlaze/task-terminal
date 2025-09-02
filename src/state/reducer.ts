@@ -1,9 +1,9 @@
-import { Actions } from "./types";
+import { Actions, ActionTypes } from "./types";
 import { AppState } from "./schemas";
 
 export const TodoReducer = (AppState: AppState, action: Actions): AppState => {
   switch (action.type) {
-    case "ADD":
+    case ActionTypes.ADD:
       return {
         ...AppState,
         active: [
@@ -17,7 +17,7 @@ export const TodoReducer = (AppState: AppState, action: Actions): AppState => {
         ],
       };
 
-    case "DELETE":
+    case ActionTypes.DELETE:
       return {
         ...AppState,
         active: AppState.active.filter((todo) => todo.id !== action.payload),
@@ -26,7 +26,7 @@ export const TodoReducer = (AppState: AppState, action: Actions): AppState => {
         ),
       };
 
-    case "DONE": {
+    case ActionTypes.DONE: {
       const itemToMove = AppState.active.find(
         (todo) => todo.id === action.payload
       );
@@ -37,7 +37,7 @@ export const TodoReducer = (AppState: AppState, action: Actions): AppState => {
       };
     }
 
-    case "UNDONE": {
+    case ActionTypes.UNDONE: {
       const itemToMove = AppState.completed.find(
         (todo) => todo.id === action.payload
       );
@@ -50,7 +50,7 @@ export const TodoReducer = (AppState: AppState, action: Actions): AppState => {
       };
     }
 
-    case "EDIT":
+    case ActionTypes.EDIT:
       return {
         ...AppState,
         active: AppState.active.map((todo) =>
@@ -65,7 +65,7 @@ export const TodoReducer = (AppState: AppState, action: Actions): AppState => {
         ),
       };
 
-    case "MOVE": {
+    case ActionTypes.MOVE: {
       const { movedTodo, destination } = action.payload;
       const sourceList = movedTodo.completed ? "completed" : "active";
 
@@ -89,7 +89,7 @@ export const TodoReducer = (AppState: AppState, action: Actions): AppState => {
       }
     }
 
-    case "CHANGE_PRIORITY": {
+    case ActionTypes.CHANGE_PRIORITY: {
       const { id, priority } = action.payload;
       return {
         ...AppState,
