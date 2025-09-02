@@ -166,11 +166,26 @@ body {
   display: flex;
   align-items: center;
   padding: 15px;
-  background-color: rgba(1, 4, 9, 0.7);
+  background-color: rgba(13, 17, 23, 0.6);
   border: 1px solid var(--border-color);
   transition: all 0.2s ease;
   position: relative;
   z-index: 1;
+  backdrop-filter: blur(5px);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 15px),
+    calc(100% - 15px) 100%,
+    0 100%
+  );
+}
+
+.todo-content-form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 15px;
 }
 
 .todos_item.menu-open {
@@ -203,26 +218,37 @@ body {
   border-color: var(--hover-border-color);
   box-shadow: 0 0 20px var(--glow-color);
   filter: drop-shadow(0 0 10px var(--primary-color));
+  z-index: 100;
 }
 
 .todos_item--text {
   flex: 1;
   font-size: 1.1rem;
   word-break: break-word;
-  margin: 0 15px;
+  margin: 0;
   min-width: 0;
   overflow-wrap: break-word;
+  color: var(--primary-color);
+  text-shadow: 0 0 3px var(--glow-color);
+  transition: color 0.3s ease;
+  padding: 5px 0;
+}
+
+.todos_item--text[style*="line-through"] {
+  color: #79c0ff80;
+  text-shadow: none;
+  opacity: 0.6;
 }
 
 .todos_item input[type="text"] {
-  width: 100%;
+  flex: 1;
   background: transparent;
   border: none;
   color: var(--primary-color);
   font-size: 1.1rem;
   font-family: var(--font-family);
   outline: none;
-  margin: 0 15px;
+  margin: 0;
   padding: 5px 0;
   border-bottom: 1px dashed var(--secondary-color);
   min-width: 0;
@@ -232,12 +258,6 @@ body {
   display: flex;
   gap: 15px;
   z-index: 2;
-}
-
-.icon {
-  font-size: 1.4rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
 }
 
 .grab-handle {
@@ -259,22 +279,25 @@ body {
   position: relative;
   display: flex;
   align-items: center;
-  margin-right: 10px;
+  flex-shrink: 0;
 }
 
 .priority-bubble--dot {
-  width: 12px;
-  height: 12px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  border: none;
+  border: 2px solid rgba(255, 255, 255, 0.15);
   cursor: pointer;
   padding: 0;
   display: inline-block;
-  transition: transform 0.2s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.4) inset;
 }
 
 .priority-bubble--dot:hover {
   transform: scale(1.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 10px var(--glow-color);
 }
 
 .priority-bubble-menu {
@@ -330,11 +353,11 @@ body {
 }
 
 .bubble-Medium {
-  background-color: var(--medium-priority-color); /* #f1c40f */
+  background-color: var(--medium-priority-color);
 }
 
 .bubble-High {
-  background-color: var(--high-priority-color); /* #e74c3c */
+  background-color: var(--high-priority-color);
 }
 
 @keyframes pan-grid {
