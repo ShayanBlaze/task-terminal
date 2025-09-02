@@ -11,22 +11,20 @@ import { Todo } from "../state/schemas";
 import { TodoContext } from "../state/TodoContext";
 import PriorityBubble from "./PriorityBubble";
 
-interface Props {
-  index: number;
+// ========== Just showing content ==========
+interface TodoItemContentProps {
   todo: Todo;
+  isDragging: boolean;
+  dragHandleProps: any;
 }
 
-const TodoItem: React.FC<Props> = ({ todo, index }) => {
+const TodoItemContent: React.FC<TodoItemContentProps> = ({
+  todo,
+  isDragging,
+  dragHandleProps,
+}) => {
   const { dispatch } = useContext(TodoContext);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id: todo.id,
-      data: {
-        droppableId: todo.completed ? "completed" : "active",
-      },
-    });
-
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(todo.title);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -43,6 +41,89 @@ const TodoItem: React.FC<Props> = ({ todo, index }) => {
     setIsEditing(false);
   };
 
+  return (
+    <div
+      className={`todos_item ${isDragging ? "dragging" : ""} ${
+        isMenuOpen ? "menu-open" : ""
+      }`}
+    >
+      <form onSubmit={handleSubmit} className="todo-content-form">
+        <PriorityBubble
+          todo={todo}
+          priority={todo.priority}
+          onMenuToggle={setIsMenuOpen}
+        />
+        {isEditing ? (
+          <input
+            ref={inputRef}
+            type="text"
+            value={editedTitle}
+            onChange={(e) => setEditedTitle(e.target.value)}
+            className="todos_item--text"
+          />
+        ) : (
+          <span
+            className="todos_item--text"
+            style={{
+              textDecoration: todo.completed ? "line-through" : "none",
+              opacity: todo.completed ? 0.5 : 1,
+            }}
+          >
+            {todo.title}
+          </span>
+        )}
+        <div className="icons">
+          <span
+            className="icon"
+            onClick={() => {
+              if (!isEditing && !todo.completed) {
+                setIsEditing(true);
+              }
+            }}
+          >
+            <AiFillEdit />
+          </span>
+          <span
+            className="icon"
+            onClick={() => dispatch({ type: "DELETE", payload: todo.id })}
+          >
+            <AiFillDelete />
+          </span>
+          <span
+            className="icon"
+            onClick={() => {
+              if (todo.completed) {
+                dispatch({ type: "UNDONE", payload: todo.id });
+              } else {
+                dispatch({ type: "DONE", payload: todo.id });
+              }
+            }}
+          >
+            <AiOutlineCheck />
+          </span>
+          <span className="icon grab-handle" {...dragHandleProps}>
+            <AiOutlineDrag />
+          </span>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+// ========== Main component that handles dnd-kit ==========
+interface Props {
+  todo: Todo;
+}
+
+const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: todo.id,
+      data: {
+        droppableId: todo.completed ? "completed" : "active",
+      },
+    });
+
   const style = transform
     ? {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
@@ -50,73 +131,13 @@ const TodoItem: React.FC<Props> = ({ todo, index }) => {
     : undefined;
 
   return (
-    <form
-      className={`todos_item ${isDragging ? "dragging" : ""} ${
-        isMenuOpen ? "menu-open" : ""
-      }`}
-      style={style}
-      onSubmit={handleSubmit}
-      ref={setNodeRef}
-      {...attributes}
-    >
-      <PriorityBubble
+    <div ref={setNodeRef} style={style} {...attributes}>
+      <TodoItemContent
         todo={todo}
-        priority={todo.priority}
-        onMenuToggle={setIsMenuOpen}
+        isDragging={isDragging}
+        dragHandleProps={listeners}
       />
-      {isEditing ? (
-        <input
-          ref={inputRef}
-          type="text"
-          value={editedTitle}
-          onChange={(e) => setEditedTitle(e.target.value)}
-          className="todos_item--text"
-        />
-      ) : (
-        <span
-          className="todos_item--text"
-          style={{
-            textDecoration: todo.completed ? "line-through" : "none",
-            opacity: todo.completed ? 0.5 : 1,
-          }}
-        >
-          {todo.title}
-        </span>
-      )}
-      <div className="icons">
-        <span
-          className="icon"
-          onClick={() => {
-            if (!isEditing && !todo.completed) {
-              setIsEditing(true);
-            }
-          }}
-        >
-          <AiFillEdit />
-        </span>
-        <span
-          className="icon"
-          onClick={() => dispatch({ type: "DELETE", payload: todo.id })}
-        >
-          <AiFillDelete />
-        </span>
-        <span
-          className="icon"
-          onClick={() => {
-            if (todo.completed) {
-              dispatch({ type: "UNDONE", payload: todo.id });
-            } else {
-              dispatch({ type: "DONE", payload: todo.id });
-            }
-          }}
-        >
-          <AiOutlineCheck />
-        </span>
-        <span className="icon grab-handle" {...listeners}>
-          <AiOutlineDrag />
-        </span>
-      </div>
-    </form>
+    </div>
   );
 };
 
