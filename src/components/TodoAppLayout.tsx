@@ -79,7 +79,7 @@ const TodoAppLayout = () => {
         <TodoList />
 
         <DragOverlay>
-          {activeTodo ? <TodoItem todo={activeTodo} index={0} /> : null}
+          {activeTodo ? <TodoItem todo={activeTodo} /> : null}
         </DragOverlay>
       </DndContext>
     </>
