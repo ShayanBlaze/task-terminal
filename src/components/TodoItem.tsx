@@ -10,6 +10,7 @@ import { useDraggable } from "@dnd-kit/core";
 import { Todo } from "../state/schemas";
 import { TodoContext } from "../state/TodoContext";
 import PriorityBubble from "./PriorityBubble";
+import { ActionTypes } from "../state/types";
 
 // ========== Just showing content ==========
 interface TodoItemContentProps {
@@ -37,7 +38,7 @@ const TodoItemContent: React.FC<TodoItemContentProps> = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch({ type: "EDIT", payload: { id: todo.id, title: editedTitle } });
+    dispatch({ type: ActionTypes.EDIT, payload: { id: todo.id, title: editedTitle } });
     setIsEditing(false);
   };
 
@@ -85,7 +86,7 @@ const TodoItemContent: React.FC<TodoItemContentProps> = ({
           </span>
           <span
             className="icon"
-            onClick={() => dispatch({ type: "DELETE", payload: todo.id })}
+            onClick={() => dispatch({ type: ActionTypes.DELETE, payload: todo.id })}
           >
             <AiFillDelete />
           </span>
@@ -93,9 +94,9 @@ const TodoItemContent: React.FC<TodoItemContentProps> = ({
             className="icon"
             onClick={() => {
               if (todo.completed) {
-                dispatch({ type: "UNDONE", payload: todo.id });
+                dispatch({ type: ActionTypes.UNDONE, payload: todo.id });
               } else {
-                dispatch({ type: "DONE", payload: todo.id });
+                dispatch({ type: ActionTypes.DONE, payload: todo.id });
               }
             }}
           >

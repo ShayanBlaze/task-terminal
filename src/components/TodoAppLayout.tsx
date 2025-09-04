@@ -14,6 +14,7 @@ import { useContext, useState } from "react";
 import { TodoContext } from "../state/TodoContext";
 import { Todo } from "../state/schemas";
 import TodoItem from "./TodoItem";
+import { ActionTypes } from "../state/types";
 
 const TodoAppLayout = () => {
   const { AppState, dispatch } = useContext(TodoContext);
@@ -60,7 +61,7 @@ const TodoAppLayout = () => {
     const destination = over.id as "active" | "completed";
 
     dispatch({
-      type: "MOVE",
+      type: ActionTypes.MOVE,
       payload: { movedTodo, destination },
     });
   };

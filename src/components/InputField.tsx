@@ -1,5 +1,6 @@
 import React, { useContext, useRef, useState } from "react";
 import { TodoContext } from "../state/TodoContext";
+import { ActionTypes } from "../state/types";
 
 const InputField: React.FC = () => {
   const { dispatch } = useContext(TodoContext);
@@ -10,7 +11,7 @@ const InputField: React.FC = () => {
   const handleAddTodo = (e: React.FormEvent) => {
     e.preventDefault();
     if (todo) {
-      dispatch({ type: "ADD", payload: todo });
+      dispatch({ type: ActionTypes.ADD, payload: todo });
       setTodo("");
     }
   };

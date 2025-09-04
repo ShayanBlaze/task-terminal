@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { Priority, Todo } from "../state/schemas";
 import { TodoContext } from "../state/TodoContext";
+import { ActionTypes } from "../state/types";
 
 interface Props {
   priority: Priority;
@@ -31,7 +32,7 @@ const PriorityBubble: React.FC<Props> = ({ priority, todo, onMenuToggle }) => {
 
   const handlePriorityChange = (newPriority: Priority) => {
     dispatch({
-      type: "CHANGE_PRIORITY",
+      type: ActionTypes.CHANGE_PRIORITY,
       payload: { id: todo.id, priority: newPriority },
     });
     toggleMenu(false);
