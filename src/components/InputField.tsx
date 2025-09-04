@@ -1,6 +1,7 @@
 import React, { useContext, useRef, useState } from "react";
 import { TodoContext } from "../state/TodoContext";
 import { ActionTypes } from "../state/types";
+import { AiOutlinePlus } from "react-icons/ai";
 
 const InputField: React.FC = () => {
   const { dispatch } = useContext(TodoContext);
@@ -34,7 +35,7 @@ const InputField: React.FC = () => {
         className="input_box"
       />
       <button className="input_button" type="submit">
-        Add Todo
+        <AiOutlinePlus />
       </button>
     </form>
   );
