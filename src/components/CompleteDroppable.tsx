@@ -1,6 +1,6 @@
 import { useDroppable } from "@dnd-kit/core";
 import TodoItem from "./TodoItem";
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { TodoContext } from "../state/TodoContext";
 
 import GenericList from "./GenericList";
@@ -10,6 +10,11 @@ const CompleteDroppable = () => {
   const { AppState } = useContext(TodoContext);
   const { setNodeRef, isOver } = useDroppable({ id: "completed" });
 
+  const renderTodoItem = useCallback(
+    (todo: Todo) => <TodoItem todo={todo} />,
+    []
+  );
+
   return (
     <div
       ref={setNodeRef}
@@ -17,7 +22,7 @@ const CompleteDroppable = () => {
     >
       <GenericList<Todo>
         items={AppState.completed}
-        renderItem={(todo) => <TodoItem todo={todo} />}
+        renderItem={renderTodoItem}
         keyExtractor={(todo) => todo.id}
       />
     </div>

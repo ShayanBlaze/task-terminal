@@ -38,7 +38,10 @@ const TodoItemContent: React.FC<TodoItemContentProps> = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch({ type: ActionTypes.EDIT, payload: { id: todo.id, title: editedTitle } });
+    dispatch({
+      type: ActionTypes.EDIT,
+      payload: { id: todo.id, title: editedTitle },
+    });
     setIsEditing(false);
   };
 
@@ -86,7 +89,9 @@ const TodoItemContent: React.FC<TodoItemContentProps> = ({
           </span>
           <span
             className="icon"
-            onClick={() => dispatch({ type: ActionTypes.DELETE, payload: todo.id })}
+            onClick={() =>
+              dispatch({ type: ActionTypes.DELETE, payload: todo.id })
+            }
           >
             <AiFillDelete />
           </span>
@@ -142,4 +147,4 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
   );
 };
 
-export default TodoItem;
+export default React.memo(TodoItem);
