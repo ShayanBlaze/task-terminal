@@ -3,6 +3,9 @@ import TodoItem from "./TodoItem";
 import { useContext } from "react";
 import { TodoContext } from "../state/TodoContext";
 
+import GenericList from "./GenericList";
+import { Todo } from "../state/schemas";
+
 const ActiveDroppable = () => {
   const { AppState } = useContext(TodoContext);
   const { setNodeRef, isOver } = useDroppable({ id: "active" });
@@ -12,9 +15,11 @@ const ActiveDroppable = () => {
       ref={setNodeRef}
       className={`droppable-container ${isOver ? "is-over" : ""}`}
     >
-      {AppState.active.map((todo, index) => (
-        <TodoItem key={todo.id} todo={todo} index={index} />
-      ))}
+      <GenericList<Todo>
+        items={AppState.active}
+        renderItem={(todo) => <TodoItem todo={todo} />}
+        keyExtractor={(todo) => todo.id}
+      />
     </div>
   );
 };
