@@ -1,10 +1,15 @@
 import { createContext, useEffect, useReducer } from "react";
+
 import { TodoContextProps, initialValue } from "./types";
-import { TodoReducer } from "./reducer";
 import { AppState, appStateSchema } from "./schemas";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
+import { TodoReducer } from "./reducer";
+import { withLogger } from "../helpers/withLogger";
+
 export const TodoContext = createContext<TodoContextProps>(initialValue);
+
+const loggingReducer = withLogger(TodoReducer);
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const [persistedState, setPersistedState] = useLocalStorage<AppState>(
@@ -12,7 +17,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     initialValue.AppState,
     appStateSchema
   );
-  const [state, dispatch] = useReducer(TodoReducer, persistedState);
+  const [state, dispatch] = useReducer(loggingReducer, persistedState);
 
   useEffect(() => {
     setPersistedState(state);
