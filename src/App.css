@@ -14,6 +14,8 @@
   --low-priority-color: #3498db;
   --medium-priority-color: #f1c40f;
   --high-priority-color: #e74c3c;
+  --success-color: #2ecc71;
+  --edit-color: #3498db;
 }
 
 * {
@@ -231,7 +233,7 @@ body {
   color: var(--primary-color);
   text-shadow: 0 0 3px var(--glow-color);
   transition: color 0.3s ease;
-  padding: 5px 0;
+  padding: 10px 10px;
 }
 
 .todos_item--text[style*="line-through"] {
@@ -249,7 +251,7 @@ body {
   font-family: var(--font-family);
   outline: none;
   margin: 0;
-  padding: 5px 0;
+  padding: 10px 10px;
   border-bottom: 1px dashed var(--secondary-color);
   min-width: 0;
 }
@@ -260,6 +262,26 @@ body {
   z-index: 2;
 }
 
+.icon {
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.icon.delete:hover {
+  color: var(--danger-color);
+  filter: drop-shadow(0 0 8px var(--danger-color));
+}
+
+.icon.check:hover {
+  color: var(--success-color);
+  filter: drop-shadow(0 0 8px var(--success-color));
+}
+
+.icon.edit:hover {
+  color: var(--edit-color);
+  filter: drop-shadow(0 0 8px var(--edit-color));
+}
+
 .grab-handle {
   cursor: grab;
 }
@@ -268,11 +290,6 @@ body {
   transform: scale(1.2);
   color: var(--secondary-color);
   filter: drop-shadow(0 0 8px var(--secondary-color));
-}
-
-.icon.delete:hover {
-  color: var(--danger-color);
-  filter: drop-shadow(0 0 8px var(--danger-color));
 }
 
 .priority-bubble {

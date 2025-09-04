@@ -51,67 +51,74 @@ const TodoItemContent: React.FC<TodoItemContentProps> = ({
         isMenuOpen ? "menu-open" : ""
       }`}
     >
-      <form onSubmit={handleSubmit} className="todo-content-form">
-        <PriorityBubble
-          todo={todo}
-          priority={todo.priority}
-          onMenuToggle={setIsMenuOpen}
-        />
-        {isEditing ? (
+      <PriorityBubble
+        todo={todo}
+        priority={todo.priority}
+        onMenuToggle={setIsMenuOpen}
+      />
+      {isEditing ? (
+        <form onSubmit={handleSubmit} className="todo-content-form">
           <input
             ref={inputRef}
             type="text"
             value={editedTitle}
             onChange={(e) => setEditedTitle(e.target.value)}
+            onBlur={() => {
+              dispatch({
+                type: ActionTypes.EDIT,
+                payload: { id: todo.id, title: editedTitle },
+              });
+              setIsEditing(false);
+            }}
             className="todos_item--text"
           />
-        ) : (
-          <span
-            className="todos_item--text"
-            style={{
-              textDecoration: todo.completed ? "line-through" : "none",
-              opacity: todo.completed ? 0.5 : 1,
-            }}
-          >
-            {todo.title}
-          </span>
-        )}
-        <div className="icons">
-          <span
-            className="icon"
-            onClick={() => {
-              if (!isEditing && !todo.completed) {
-                setIsEditing(true);
-              }
-            }}
-          >
-            <AiFillEdit />
-          </span>
-          <span
-            className="icon"
-            onClick={() =>
-              dispatch({ type: ActionTypes.DELETE, payload: todo.id })
+        </form>
+      ) : (
+        <span
+          className="todos_item--text"
+          style={{
+            textDecoration: todo.completed ? "line-through" : "none",
+            opacity: todo.completed ? 0.5 : 1,
+          }}
+        >
+          {todo.title}
+        </span>
+      )}
+      <div className="icons">
+        <span
+          className="icon edit"
+          onClick={() => {
+            if (!isEditing && !todo.completed) {
+              setIsEditing(true);
             }
-          >
-            <AiFillDelete />
-          </span>
-          <span
-            className="icon"
-            onClick={() => {
-              if (todo.completed) {
-                dispatch({ type: ActionTypes.UNDONE, payload: todo.id });
-              } else {
-                dispatch({ type: ActionTypes.DONE, payload: todo.id });
-              }
-            }}
-          >
-            <AiOutlineCheck />
-          </span>
-          <span className="icon grab-handle" {...dragHandleProps}>
-            <AiOutlineDrag />
-          </span>
-        </div>
-      </form>
+          }}
+        >
+          <AiFillEdit />
+        </span>
+        <span
+          className="icon delete"
+          onClick={() =>
+            dispatch({ type: ActionTypes.DELETE, payload: todo.id })
+          }
+        >
+          <AiFillDelete />
+        </span>
+        <span
+          className="icon check"
+          onClick={() => {
+            if (todo.completed) {
+              dispatch({ type: ActionTypes.UNDONE, payload: todo.id });
+            } else {
+              dispatch({ type: ActionTypes.DONE, payload: todo.id });
+            }
+          }}
+        >
+          <AiOutlineCheck />
+        </span>
+        <span className="icon grab-handle" {...dragHandleProps}>
+          <AiOutlineDrag />
+        </span>
+      </div>
     </div>
   );
 };
