@@ -1,46 +1,96 @@
-# Getting Started with Create React App
+# 📃 Task Terminal
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![dnd-kit](https://img.shields.io/badge/Drag%20&%20Drop-%40dnd--kit-764ABC?style=for-the-badge)
+![Zod](https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white)
 
-## Available Scripts
+A modern, terminal-inspired task management application built with React and TypeScript. Task Terminal demonstrates a robust frontend architecture using functional components, hooks, and type-safe state management.
 
-In the project directory, you can run:
+![Task Terminal Main Page](https://i.imgur.com/atmiEeZ.png)
+_Your first encounter, a mysterious feeling._
 
-### `npm start`
+## ✨ Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Task Management:** Add, edit, delete, and organize tasks with full CRUD functionality.
+- **Completion Tracking:** Toggle tasks between complete and incomplete states.
+- **Drag & Drop:** Move tasks seamlessly between "Active" and "Completed" columns using [@dnd-kit](https://dndkit.com/).
+- **Priority Levels:** Assign Low, Medium, or High priority to tasks.
+- **Persistent Storage:** Tasks are automatically saved to localStorage and restored on reload.
+- **Type Safety:** Built entirely with TypeScript for reliability and maintainability.
+- **Data Validation:** Uses [Zod](https://zod.dev/) to validate localStorage data and prevent crashes from invalid state.
+- **Responsive UI:** Clean, retro terminal-themed interface optimized for all screen sizes.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 🛠️ Tech Stack
 
-### `npm test`
+- **Framework:** [React](https://reactjs.org/)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **State Management:** React Context API with `useReducer`
+- **Drag & Drop:** [@dnd-kit](https://dndkit.com/)
+- **Validation:** [Zod](https://zod.dev/)
+- **Styling:** CSS (terminal theme)
+- **Testing:** [React Testing Library](https://testing-library.com/) & [Jest](https://jestjs.io/)
+- **Tooling:** [Create React App](https://create-react-app.dev/)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🚀 Getting Started
 
-### `npm run build`
+Follow these steps to set up and run Task Terminal locally.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Prerequisites
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- [Node.js](https://nodejs.org/) (v14.0.0 or higher)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Installation
 
-### `npm run eject`
+1. **Clone the repository:**
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+   ```sh
+   git clone https://github.com/your-username/task-terminal.git
+   cd task-terminal
+   ```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. **Install dependencies:**
+   ```sh
+   npm install
+   # or
+   yarn install
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### 📜 Scripts
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- `npm start` — Run the app in development mode ([http://localhost:3000](http://localhost:3000))
+- `npm test` — Launch the test runner in watch mode
+- `npm run build` — Build the app for production
 
-## Learn More
+## 📂 Project Structure
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+src/
+├── components/        # Reusable React components
+│   ├── ActiveDroppable.tsx
+│   ├── CompleteDroppable.tsx
+│   ├── GenericList.tsx
+│   ├── InputField.tsx
+│   ├── PriorityBubble.tsx
+│   └── TodoItem.tsx
+│
+├── helpers/           # Utility functions
+│
+├── hooks/             # Custom React hooks
+│
+├── state/             # State management logic
+│   ├── schemas.ts     # Zod schemas for validation
+│   ├── reducer.ts     # Reducer function
+│   ├── reducer.test.ts# Reducer unit tests
+│   ├── TodoContext.tsx# React Context for state
+│   └── types.ts       # TypeScript types and enums
+│
+├── App.tsx            # Main application component
+├── App.css            # Main stylesheet
+└── index.tsx          # Application entry point
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 📝 License
+
+This project is licensed under the [MIT License](LICENSE).
