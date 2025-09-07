@@ -4,6 +4,7 @@ import {
   AiFillDelete,
   AiOutlineCheck,
   AiOutlineDrag,
+  AiOutlineEdit,
 } from "react-icons/ai";
 import { useDraggable } from "@dnd-kit/core";
 
@@ -36,13 +37,21 @@ const TodoItemContent: React.FC<TodoItemContentProps> = ({
     }
   }, [isEditing]);
 
+  const handleEdit = () => {
+    if (editedTitle.trim()) {
+      dispatch({
+        type: ActionTypes.EDIT,
+        payload: { id: todo.id, title: editedTitle },
+      });
+    } else {
+      setEditedTitle(todo.title);
+    }
+    setIsEditing(false);
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch({
-      type: ActionTypes.EDIT,
-      payload: { id: todo.id, title: editedTitle },
-    });
-    setIsEditing(false);
+    handleEdit();
   };
 
   return (
@@ -63,13 +72,7 @@ const TodoItemContent: React.FC<TodoItemContentProps> = ({
             type="text"
             value={editedTitle}
             onChange={(e) => setEditedTitle(e.target.value)}
-            onBlur={() => {
-              dispatch({
-                type: ActionTypes.EDIT,
-                payload: { id: todo.id, title: editedTitle },
-              });
-              setIsEditing(false);
-            }}
+            onBlur={handleEdit}
             className="todos_item--text"
           />
         </form>
@@ -88,12 +91,14 @@ const TodoItemContent: React.FC<TodoItemContentProps> = ({
         <span
           className="icon edit"
           onClick={() => {
-            if (!isEditing && !todo.completed) {
+            if (isEditing) {
+              handleEdit();
+            } else if (!todo.completed) {
               setIsEditing(true);
             }
           }}
         >
-          <AiFillEdit />
+          {isEditing ? <AiFillEdit /> : <AiOutlineEdit />}
         </span>
         <span
           className="icon delete"
